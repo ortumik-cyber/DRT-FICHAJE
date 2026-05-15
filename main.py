@@ -335,7 +335,7 @@ async def admin_export(payload=Depends(require_admin)):
 
 # ── FRONTEND ──────────────────────────────────────────────────
 import os as _os
-_static = _os.path.join(_os.path.dirname(__file__), "estatico")
+_static = _os.path.join(_os.path.dirname(__file__), "static")
 if _os.path.isdir(_static):
     app.mount("/static", StaticFiles(directory=_static), name="static")
 @app.get("/{full_path:path}", include_in_schema=False)
