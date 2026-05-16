@@ -268,7 +268,10 @@ async def mis_fichajes(payload=Depends(verify_token)):
 
 # ── ONEDRIVE OAUTH ────────────────────────────────────────────
 @app.get("/api/auth/onedrive/connect")
-async def onedrive_connect(payload=Depends(verify_token)):
+async def onedrive_connect(token:str=None):
+    if not token: raise HTTPException(401,"Token requerido")
+    try: payload=jwt.decode(token,JWT_SECRET,algorithms=[JWT_ALGORITHM])
+    except JWTError: raise HTTPException(401,"Token inválido")
     if not AZURE_CLIENT_ID: raise HTTPException(500,"Azure no configurado")
     return RedirectResponse(get_auth_url(payload["sub"]))
 
