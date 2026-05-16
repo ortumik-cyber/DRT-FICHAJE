@@ -54,6 +54,8 @@ async function api(path,opts={}){
 }
 
 // ── UTILS ─────────────────────────────────────────────────────
+const localDate=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const sameDay=(ts,ds)=>localDate(new Date(ts))===ds;
 const fT=d=>new Date(d).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});
 const fTs=d=>new Date(d).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
 const fDate=d=>new Date(d).toLocaleDateString("es-ES",{day:"2-digit",month:"2-digit",year:"2-digit"});
@@ -196,8 +198,8 @@ function FicharTab({user,now,fichajes,onRefresh}){
   const[ld,setLd]=useState(false);const[msg,setMsg]=useState(null);
   const last=fichajes.length?fichajes[fichajes.length-1]:null;
   const isIn=last?last.tipo==="entrada":false;
-  const today=new Date().toISOString().slice(0,10);
-  const todayPairs=pairFiches(fichajes.filter(f=>f.ts.startsWith(today)));
+  const today=localDate();
+  const todayPairs=pairFiches(fichajes.filter(f=>sameDay(f.ts,today)));
   async function fichar(){
     if(!isIn&&todayPairs.length>=3)return setMsg({t:"w",m:"⚠️ Ya tienes 3 jornadas registradas hoy."});
     setLd(true);setMsg(null);
