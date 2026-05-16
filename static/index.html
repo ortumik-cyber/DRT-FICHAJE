@@ -54,7 +54,7 @@ async function api(path,opts={}){
 }
 
 // ── UTILS ─────────────────────────────────────────────────────
-const parseTs=ts=>new Date(ts.endsWith("Z")?ts:ts+"Z");
+const parseTs=ts=>ts instanceof Date?ts:new Date(typeof ts==="string"&&!ts.endsWith("Z")?ts+"Z":ts);
 const localDate=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const sameDay=(ts,ds)=>localDate(parseTs(ts))===ds;
 const fT=d=>parseTs(d).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});
