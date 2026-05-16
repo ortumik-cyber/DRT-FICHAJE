@@ -476,7 +476,7 @@ function EmpleadosAdmin({empleados,allFichajes,onRefresh}){
   const[sel,setSel]=useState(null);const[showNew,setShowNew]=useState(false);
   const[newPwd,setNewPwd]=useState("");const[pwdMsg,setPwdMsg]=useState("");const[ld,setLd]=useState(false);
   const activos=empleados.filter(u=>!u.deleted);
-  const lastF=id=>{const a=allFichajes.filter(f=>f.uid===id);return a.length?a[a.length-1]:null;};
+  const lastF=id=>{const a=allFichajes.filter(f=>f.uid===id);return a.length?a[0]:null;};
   async function toggleActive(u){try{await api(`/api/admin/empleados/${u.id}`,{method:"PUT",body:JSON.stringify({active:!u.active})});onRefresh();setSel(null);}catch(e){alert(e.message);}}
   async function resetPwd(){if(newPwd.length<6)return setPwdMsg("e");setLd(true);
     try{await api("/api/admin/reset-pwd",{method:"POST",body:JSON.stringify({user_id:sel.id,new_pwd:newPwd})});setPwdMsg("ok");setNewPwd("");}
