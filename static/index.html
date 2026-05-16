@@ -360,7 +360,7 @@ function ConfigTab({user,onUserUpdate}){
         </div>
         {od.connected?
           <button onClick={disconnect} style={{...bB,background:"transparent",color:RED,border:"1px solid rgba(224,57,70,.3)",fontSize:11,padding:"5px 12px"}}>Desconectar</button>:
-          <button onClick={()=>window.location.href=BASE+"/api/auth/onedrive/connect"} style={{...bB,background:BLUE,color:"#fff",fontSize:12,padding:"8px 16px"}}>🔗 Conectar OneDrive</button>
+          <button onClick={()=>window.location.href=`${BASE}/api/auth/onedrive/connect?token=${getToken()}`} style={{...bB,background:BLUE,color:"#fff",fontSize:12,padding:"8px 16px"}}>🔗 Conectar OneDrive</button>
         }
       </div>
 
