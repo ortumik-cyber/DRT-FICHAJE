@@ -379,7 +379,7 @@ async def admin_delete_user(user_id:str, payload=Depends(require_admin)):
         content=gen_excel([target],user_fichajes,all_audit)
         today=date.today().isoformat()
         nombre_safe=target.get("fullname","usuario").replace(" ","_")
-        upload_to_onedrive(at,"Eliminados",f"{today}_{nombre_safe}.xlsx",content)
+        upload_to_onedrive(at,"Backup-completo",f"{today}_{nombre_safe}.xlsx",content)
     except: pass
     # Desactivar en lugar de borrar físicamente (conservar datos)
     db.collection("users").document(user_id).update({"active":False,"deleted":True,"deletedBy":payload["sub"],"deletedAt":datetime.utcnow().isoformat()})
