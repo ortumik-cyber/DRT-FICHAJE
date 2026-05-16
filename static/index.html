@@ -44,13 +44,19 @@ const getToken=()=>localStorage.getItem("drt_token");
 const setToken=t=>localStorage.setItem("drt_token",t);
 const clearToken=()=>localStorage.removeItem("drt_token");
 
+function addZ(v){
+  if(typeof v==="string"&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(v)&&!v.endsWith("Z"))return v+"Z";
+  if(Array.isArray(v))return v.map(addZ);
+  if(v&&typeof v==="object")return Object.fromEntries(Object.entries(v).map(([k,vv])=>[k,addZ(vv)]));
+  return v;
+}
 async function api(path,opts={}){
   const tk=getToken();
   const headers={"Content-Type":"application/json"};
   if(tk)headers["Authorization"]="Bearer "+tk;
   const res=await fetch(BASE+path,{...opts,headers});
   if(!res.ok){const e=await res.json().catch(()=>({detail:"Error de red"}));throw new Error(e.detail||"Error");}
-  return res.json();
+  return addZ(await res.json());
 }
 
 // ── UTILS ─────────────────────────────────────────────────────
