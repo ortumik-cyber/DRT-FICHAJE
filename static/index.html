@@ -420,7 +420,7 @@ function EmpApp({user,now,onLogout,onAdmin,onUserUpdate}){
 
 // ── ADMIN ─────────────────────────────────────────────────────
 function Dashboard({empleados,allFichajes,now}){
-  const lastF=id=>{const a=allFichajes.filter(f=>f.uid===id);return a.length?a[a.length-1]:null;};
+  const lastF=id=>{const a=allFichajes.filter(f=>f.uid===id);return a.length?a[0]:null;};
   const activos=empleados.filter(u=>u.active&&!u.deleted);
   const enJornada=activos.filter(u=>{const lf=lastF(u.id);return lf&&lf.tipo==="entrada";});
   const alertas=enJornada.filter(u=>{const lf=lastF(u.id);return lf&&hAgo(lf.ts,8);});
