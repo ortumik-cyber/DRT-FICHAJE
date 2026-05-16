@@ -57,15 +57,15 @@ async function api(path,opts={}){
 const parseTs=ts=>new Date(ts.endsWith("Z")?ts:ts+"Z");
 const localDate=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const sameDay=(ts,ds)=>localDate(parseTs(ts))===ds;
-const fT=d=>new Date(d).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});
-const fTs=d=>new Date(d).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
-const fDate=d=>new Date(d).toLocaleDateString("es-ES",{day:"2-digit",month:"2-digit",year:"2-digit"});
+const fT=d=>parseTs(d).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});
+const fTs=d=>parseTs(d).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+const fDate=d=>parseTs(d).toLocaleDateString("es-ES",{day:"2-digit",month:"2-digit",year:"2-digit"});
 const fDT=d=>fDate(d)+" "+fTs(d);
-const fD=d=>new Date(d).toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const fD=d=>parseTs(d).toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 const fMs=ms=>Math.floor(ms/3600000)+"h "+Math.floor((ms%3600000)/60000)+"m";
 const RET=4;
 const canDel=ts=>{const d=new Date(ts);d.setFullYear(d.getFullYear()+RET);return Date.now()>=d;};
-const hAgo=(ts,h)=>Date.now()-new Date(ts).getTime()>h*3600000;
+const hAgo=(ts,h)=>Date.now()-parseTs(ts).getTime()>h*3600000;
 const getGPS=()=>new Promise(r=>{
   if(!navigator.geolocation)return r({lat:null,lon:null,acc:null});
   navigator.geolocation.getCurrentPosition(p=>r({lat:p.coords.latitude,lon:p.coords.longitude,acc:Math.round(p.coords.accuracy)}),()=>r({lat:null,lon:null,acc:null}),{timeout:6000,enableHighAccuracy:true});
@@ -79,7 +79,7 @@ function pairFiches(fs){
   }
   return pairs;
 }
-const totalMs=pairs=>pairs.reduce((ms,p)=>{if(p.ent&&p.sal)ms+=new Date(p.sal.ts)-new Date(p.ent.ts);return ms;},0);
+const totalMs=pairs=>pairs.reduce((ms,p)=>{if(p.ent&&p.sal)ms+=parseTs(p.sal.ts)-parseTs(p.ent.ts);return ms;},0);
 const GDPR=`POLÍTICA DE PRIVACIDAD — DRT Fichaje\nResponsable: Durango Rugby Taldea, Durango (Bizkaia).\nDatos tratados: nombre y apellido, email, teléfono, fecha/hora de fichaje, dirección IP pública, coordenadas GPS.\nFinalidad: Control de presencia y jornada laboral obligatorio conforme al art. 34 ET y RDL 8/2019.\nConservación mínima: ${RET} años. Contraseñas: hash SHA-256 (no reversible).\nDerechos: Acceso, rectificación, portabilidad y oposición. Contactar con Durango Rugby Taldea.`;
 
 // ── COMPONENTES BASE ──────────────────────────────────────────
