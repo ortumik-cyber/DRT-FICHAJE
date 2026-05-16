@@ -19,7 +19,13 @@ th{background:#1a4080;padding:10px 12px;text-align:left;font-size:10px;color:#c8
 td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.05);color:#fff;font-size:12px}
 tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.04)}
 input:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #0d1f4a inset;-webkit-text-fill-color:#fff}
+script{display:none!important}
 </style>
+<div id="preloader" style="position:fixed;inset:0;background:#0a2a5e;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:20px">
+  <img src="https://durangorugby.eus/wp-content/uploads/2018/10/DRTLogo.png" style="height:80px;object-fit:contain" onerror="this.style.display='none'">
+  <div style="color:#6ec6ff;font-size:14px;font-family:sans-serif">Cargando DRT Fichaje…</div>
+  <div style="width:30px;height:30px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:white;animation:sp .7s linear infinite"></div>
+</div>
 </head>
 <body>
 <div id="root"></div>
@@ -624,6 +630,8 @@ function App(){
   const[now,setNow]=useState(new Date());
 
   useEffect(()=>{
+    const pre=document.getElementById("preloader");
+    if(pre)setTimeout(()=>pre.style.display="none",300);
     const clock=setInterval(()=>setNow(new Date()),1000);
     (async()=>{
       try{const r=await api("/api/status");
